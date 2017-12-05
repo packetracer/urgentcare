@@ -167,7 +167,12 @@ def getDevice(event):
 
 #Main driver function for skill
 def lambda_handler(event, context):
-    #Collect intent
+    #Check for intent in event, if not, open welcome prompt.
+    if 'intent' not in str(event):
+        response = "Welcome to the Lafayette General Urgent Care Skill.  How may I help you today?"
+        speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"' + response + '"},"shouldEndSession":false}}'
+        return json.loads(speech)     
+    #Intent exists, collect it
     intent = getIntent(event)
     #Collect device information
     req = getDevice(event)
