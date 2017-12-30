@@ -1,0 +1,531 @@
+{
+  "languageModel": {
+    "types": [
+      {
+        "name": "AMAZON.Person",
+        "values": [
+          {
+            "id": null,
+            "name": {
+              "value": "Pere",
+              "synonyms": [
+                "Paris"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "facility",
+        "values": [
+          {
+            "id": "1952",
+            "name": {
+              "value": "Urgent Care of Carencro",
+              "synonyms": [
+                "Carencro",
+                "Carendcro",
+                "the cro",
+                "Karen de crow"
+              ]
+            }
+          },
+          {
+            "id": "1953",
+            "name": {
+              "value": "Urgent Care of River Ranch",
+              "synonyms": [
+                "River Ranch",
+                "Lafayette",
+                "laffyet"
+              ]
+            }
+          },
+          {
+            "id": "1954",
+            "name": {
+              "value": "Urgent Care of Sugar Mill Pond",
+              "synonyms": [
+                "Sugar Mill Pond",
+                "Youngsville",
+                "sugar mill"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "phoneNumber",
+        "values": [
+          {
+            "id": null,
+            "name": {
+              "value": "0123456789",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "1234567890",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "3371234567",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "3372874598",
+              "synonyms": []
+            }
+          }
+        ]
+      },
+      {
+        "name": "Yes",
+        "values": [
+          {
+            "id": "Yes",
+            "name": {
+              "value": "Yes",
+              "synonyms": [
+                "Yep",
+                "sure am",
+                "sure do",
+                "yes i do"
+              ]
+            }
+          },
+          {
+            "id": "No",
+            "name": {
+              "value": "No",
+              "synonyms": [
+                "nah",
+                "nuh uh",
+                "nope",
+                "no way",
+                "no i don't",
+                "no i do not"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": [
+          "cancel"
+        ]
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": [
+          "stop"
+        ]
+      },
+      {
+        "name": "confirmAppt",
+        "samples": [
+          "Yes",
+          "Yes I would",
+          "Yes please"
+        ],
+        "slots": []
+      },
+      {
+        "name": "denyAppt",
+        "samples": [
+          "No",
+          "nope",
+          "non",
+          "nuh ",
+          "nyuh uh ",
+          "hell no",
+          "fuck no",
+          "fucking hell no",
+          "are you tarded"
+        ],
+        "slots": []
+      },
+      {
+        "name": "getHours",
+        "samples": [
+          "what are the hours",
+          "what time are they open",
+          "when do you they open",
+          "what time do they close at",
+          "what are the business hours",
+          "the hours",
+          "business hours",
+          "operating hours",
+          "when they open",
+          "when they close",
+          "what time they are open at",
+          "what time do they take appointments until",
+          "what time can i make an appointment at",
+          "when are they open",
+          "are you open",
+          "walk-in clinic hours of operations",
+          "hours of operations"
+        ],
+        "slots": []
+      },
+      {
+        "name": "getNextAppt",
+        "samples": [
+          "get next appointment time",
+          "for next appointment time",
+          "next available appointment",
+          "closest available appointment",
+          "next appointment",
+          "what's the next appointment at {facility}",
+          "when's the next appoint at {facility}",
+          "what time is the next appointment at {facility}"
+        ],
+        "slots": [
+          {
+            "name": "facility",
+            "type": "facility"
+          }
+        ]
+      },
+      {
+        "name": "getPhone",
+        "samples": [
+          "what the phone number for {facility}",
+          "what's the number for {facility}",
+          "what's the phone numbers",
+          "what are the phone numbers",
+          "what is the phone number for {facility}",
+          "phone number",
+          "phone numbers",
+          "what is the phone number for Urgent Care"
+        ],
+        "slots": [
+          {
+            "name": "facility",
+            "type": "facility",
+            "samples": [
+              "{facility}"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "listFac",
+        "samples": [
+          "list facilities",
+          "list the urgent care facilities in my area",
+          "list all the urgent cares",
+          "list all the urgent care facilities",
+          "list urgent cares",
+          "locations",
+          "facilities"
+        ],
+        "slots": []
+      },
+      {
+        "name": "locate",
+        "samples": [
+          "Locate my device",
+          "locate",
+          "where am i",
+          "where i am",
+          "what's the closet urgent care facility",
+          "tell me the closest facility",
+          "how far is the closest urgent care",
+          "tell me the closest urgent care",
+          "what is the closest urgent care",
+          "locate facilities",
+          "drive times",
+          "locate the closest facility"
+        ],
+        "slots": []
+      },
+      {
+        "name": "scheduleAppt",
+        "samples": [
+          "schedule appointment",
+          "i need an appointment",
+          "schedule the next available appointment",
+          "can I make an appointment",
+          "schedule an appointment at {facility}",
+          "schedule the next available appointment at {facility}",
+          "make an appointment",
+          "make an appointment {facility}",
+          "{facility} schedule an appointment"
+        ],
+        "slots": [
+          {
+            "name": "firstName",
+            "type": "AMAZON.US_FIRST_NAME",
+            "samples": [
+              "{firstName}"
+            ]
+          },
+          {
+            "name": "lastName",
+            "type": "AMAZON.Person",
+            "samples": [
+              "{lastName}"
+            ]
+          },
+          {
+            "name": "phoneNumber",
+            "type": "phoneNumber",
+            "samples": [
+              "{phoneNumber}"
+            ]
+          },
+          {
+            "name": "facility",
+            "type": "facility",
+            "samples": [
+              "{facility}"
+            ]
+          },
+          {
+            "name": "birthday",
+            "type": "AMAZON.DATE",
+            "samples": [
+              "{birthday}"
+            ]
+          },
+          {
+            "name": "cigna",
+            "type": "Yes",
+            "samples": [
+              "{cigna}"
+            ]
+          },
+          {
+            "name": "bayou",
+            "type": "Yes",
+            "samples": [
+              "{bayou}"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "waitTime",
+        "samples": [
+          "tell me the wait times",
+          "what are the wait times",
+          "list the wait times",
+          "how long do i have to wait",
+          "how long is the wait time",
+          "times",
+          "what are the wait times at {facility}",
+          "how long is the wait at {facility}",
+          "whats the wait at {facility}",
+          "get wait times"
+        ],
+        "slots": [
+          {
+            "name": "facility",
+            "type": "facility"
+          }
+        ]
+      }
+    ],
+    "invocationName": "urgent care"
+  },
+  "prompts": [
+    {
+      "id": "Elicit.Intent-getPhone.IntentSlot-facility",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which facility would you like the phone number for, Urgent Care of Carencro, River Ranch, or Sugar Mill Pond?"
+        }
+      ]
+    },
+    {
+      "id": "Confirm.Intent-getPhone.IntentSlot-facility",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "I heard {facility} is this correct?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-firstName",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "If this is an emergency, please call nine one one or seek the nearest hospital.  What is your first name?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-lastName",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "what is your last name?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-phoneNumber",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "what is your phone number starting with area code?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-facility",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Which facility would you like to schedule an appointment for - Urgent Care of River Ranch, Sugar Mill Pond, or Carencro?"
+        }
+      ]
+    },
+    {
+      "id": "Confirm.Intent-scheduleAppt.IntentSlot-facility",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "I heard {facility}, is that correct?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-birthday",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "What is your date of birth?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-cigna",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Do you have Cigna insurance?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-scheduleAppt.IntentSlot-bayou",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Are you enrolled in a Bayou Health Plan?"
+        }
+      ]
+    }
+  ],
+  "dialog": {
+    "intents": [
+      {
+        "name": "getPhone",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "facility",
+            "type": "facility",
+            "elicitationRequired": true,
+            "confirmationRequired": true,
+            "prompts": {
+              "elicitation": "Elicit.Intent-getPhone.IntentSlot-facility",
+              "confirmation": "Confirm.Intent-getPhone.IntentSlot-facility"
+            }
+          }
+        ]
+      },
+      {
+        "name": "scheduleAppt",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "firstName",
+            "type": "AMAZON.US_FIRST_NAME",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-firstName"
+            }
+          },
+          {
+            "name": "lastName",
+            "type": "AMAZON.Person",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-lastName"
+            }
+          },
+          {
+            "name": "phoneNumber",
+            "type": "phoneNumber",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-phoneNumber"
+            }
+          },
+          {
+            "name": "facility",
+            "type": "facility",
+            "elicitationRequired": true,
+            "confirmationRequired": true,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-facility",
+              "confirmation": "Confirm.Intent-scheduleAppt.IntentSlot-facility"
+            }
+          },
+          {
+            "name": "birthday",
+            "type": "AMAZON.DATE",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-birthday"
+            }
+          },
+          {
+            "name": "cigna",
+            "type": "Yes",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-cigna"
+            }
+          },
+          {
+            "name": "bayou",
+            "type": "Yes",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicitation": "Elicit.Intent-scheduleAppt.IntentSlot-bayou"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
