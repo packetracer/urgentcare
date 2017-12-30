@@ -39,9 +39,9 @@ sSize = "600x600"
 lSize = "1200x1200"
 origin_ico = "icon:https://i.imgur.com/BCgMssM.png"
 dest_ico = "icon:https://i.imgur.com/GatOmK8.png"
-key = "AIzaSyCD71FwYGBlaY3oM2xlvfXBRkpKXENdiCM"
-gkey = "AIzaSyCD71FwYGBlaY3oM2xlvfXBRkpKXENdiCM"
-apptToken = "tEDPEpUNXgojpl+Km7Wq12ggJnDsm4zOVSRAgb0s8PAsSdcNVwIYq02P+BbovsHp3+Wug03sWwfTj3+bUf5HOw=="
+key = "YOURKEYHERE"
+gkey = "YOURKEYHERE"
+apptToken = "CLOCKWISETOKENHERE"
 
 postInfo = 'utf8=%E2%9C%93&authenticity_token=tEDPEpUNXgojpl%2BKm7Wq12ggJnDsm4zOVSRAgb0s8PAsSdcNVwIYq02P%2BBbovsHp3%2BWug03sWwfTj3%2BbUf5HOw%3D%3D&appointment%5Bhospital_id%5D="+clinicID+"&appointment%5Bprovider_id%5D="+providerID+"&appointment%5Bis_urgentcare%5D=true&appointment%5Breason_description%5D=Walk-In+Visit&appointment%5Bfirst_name%5D=Testing&appointment%5Blast_name%5D=Testing&appointment%5Bdays_from_today%5D=0&appointment%5Bapt_time%5D=2017-12-06T17%3A30%3A00.000-06%3A00&appointment%5Bemail%5D=amazonapp%40lgh.org&appointment%5Bphone_number%5D=337+366+4039&extra_fields%5B9364%5D%5Bvalue%5D=11%2F23%2F1984&extra_fields%5B9364%5D%5Bcustom_field_id%5D=9364&extra_fields%5B10074%5D%5Bvalue%5D=No&extra_fields%5B10074%5D%5Bcustom_field_id%5D=10074&extra_fields%5B10555%5D%5Bvalue%5D=No&extra_fields%5B10555%5D%5Bcustom_field_id%5D=10555&appointment%5Bcan_send_alert_sms%5D=0&appointment%5Bcan_send_alert_sms%5D=1&appointment%5Bpager_minutes%5D=20&appointment%5Bis_online%5D=true&appointment%5Btos%5D=0&appointment%5Btos%5D=1&commit=Confirm+me!")'
 
