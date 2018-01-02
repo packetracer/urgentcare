@@ -27,14 +27,14 @@ class Clinic(object):
                 self.clinID = clinID
                 self.waitID = waitID
 
-#LOAD GLOBAL CLINIC LIST WITH DATA   
-
+#-----LOAD GLOBAL CLINIC LIST WITH DATA-----#   
 clinicList = []
 clinicList.append(Clinic("Urgent Care of Carencro", "917 W Gloria Switch Rd, Lafayette, LA 70507", "1952", "4860"))
 clinicList.append(Clinic("Urgent Care of River Ranch", "1216 Camellia Blvd, Lafayette, LA 70508", "1953", "4861"))
 clinicList.append(Clinic("Urgent Care of Sugar Mill Pond", "2810 Bonin Rd, Youngsville, LA 70592", "1954", "4862"))
-
 #-----End Clinic Definitions-----#
+
+#-----Set Global Vars-----#
 sSize = "600x600"
 lSize = "1200x1200"
 origin_ico = "icon:https://i.imgur.com/BCgMssM.png"
@@ -42,9 +42,7 @@ dest_ico = "icon:https://i.imgur.com/GatOmK8.png"
 key = "YOURKEYHERE"
 gkey = "YOURKEYHERE"
 apptToken = "CLOCKWISETOKENHERE"
-
 postInfo = 'utf8=%E2%9C%93&authenticity_token=tEDPEpUNXgojpl%2BKm7Wq12ggJnDsm4zOVSRAgb0s8PAsSdcNVwIYq02P%2BBbovsHp3%2BWug03sWwfTj3%2BbUf5HOw%3D%3D&appointment%5Bhospital_id%5D="+clinicID+"&appointment%5Bprovider_id%5D="+providerID+"&appointment%5Bis_urgentcare%5D=true&appointment%5Breason_description%5D=Walk-In+Visit&appointment%5Bfirst_name%5D=Testing&appointment%5Blast_name%5D=Testing&appointment%5Bdays_from_today%5D=0&appointment%5Bapt_time%5D=2017-12-06T17%3A30%3A00.000-06%3A00&appointment%5Bemail%5D=amazonapp%40lgh.org&appointment%5Bphone_number%5D=337+366+4039&extra_fields%5B9364%5D%5Bvalue%5D=11%2F23%2F1984&extra_fields%5B9364%5D%5Bcustom_field_id%5D=9364&extra_fields%5B10074%5D%5Bvalue%5D=No&extra_fields%5B10074%5D%5Bcustom_field_id%5D=10074&extra_fields%5B10555%5D%5Bvalue%5D=No&extra_fields%5B10555%5D%5Bcustom_field_id%5D=10555&appointment%5Bcan_send_alert_sms%5D=0&appointment%5Bcan_send_alert_sms%5D=1&appointment%5Bpager_minutes%5D=20&appointment%5Bis_online%5D=true&appointment%5Btos%5D=0&appointment%5Btos%5D=1&commit=Confirm+me!")'
-
 now = ""
 
 #----If Alexa API returns forbidden- ask for user permission to access location ---# 
@@ -132,7 +130,7 @@ def locate(origin, isOpen):
     closestClinic = []
     closestClinic = findClosestClinic(origin)
         
-    #Pack speech data, return to Echo
+    #Check for facilities being opened or closed, then pack speech data, return to Echo
     if isOpen == True:
         print "CLOSEST CLINIC: " + closestClinic[0]
         print "DISTANCE:" + closestClinic[1]
@@ -156,7 +154,7 @@ def getIntent(event):
 #Routine that lists all LGH Urgent Care facilities     
 def listFac(origin, isOpen):
     clinicDist = []
-    
+    #Check for facility open or closed, locate closest facility and return data to echo user
     if isOpen == True:
         response = "The clinics in your area are; "
         for item in clinicList:
@@ -184,12 +182,14 @@ def listFac(origin, isOpen):
             response = response + ' ' + item.name + ' which is ' + distance + ' away and takes ' + duration + ' to get there. '
         speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"'+response+'"},"card": {"type": "Standard","title": "Lafayette General Urgent Care", "text": "Lafayette General Urgent Care Facilities: \\n Urgent Care of Carencro \\n Urgent Care of River Ranch \\n Urgent Care of Sugar Mill Pond ","image": {"smallImageUrl": "https://maps.googleapis.com/maps/api/staticmap?size='+sSize+'&markers='+origin_ico+'%7C'+origin+'&markers='+dest_ico+'%7Clabel:A%7C917+W+Gloria+Switch+Lafayette+LA&markers=icon:https://i.imgur.com/GatOmK8.png%7Clabel:B%7C%7C1216+Camellia+Blvd+Lafayette+LA%7C1216+Camellia+Blvd+Lafayette+LA%7C2810+Bonin+Rd+Youngsville&key='+key+'"}}}}'
         return json.loads(speech)
-        
+
+#-----Check if facilities are open, return current wait time from Clockwise-----#
 def waitTime(event, isOpen):
     response = "The current wait times are: "
     cardText = response
     
     if isOpen == True:
+	#-----If open and facility is specified- return wait time of specific facility-----#
         if "ER_SUCCESS_MATCH" in str(event['request']['intent']['slots']['facility']):
             clinID = event['request']['intent']['slots']['facility']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['id']
             response = "The current wait time at "
@@ -207,14 +207,14 @@ def waitTime(event, isOpen):
 
             speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"'+response+' You can say schedule an appointment if you would like to schedule an appointment at this time."},"card": {"type": "Simple","title": "Lafayette General Urgent Care", "content": "'+cardText+'"},"shouldEndSession":false}}'
             return json.loads(speech)
-            
+        #-----Otherwise return wait times of all facilities-----#
         for item in clinicList:
             waitTime = getWaitTime(item.clinID, item.waitID)
             response = response + ' ' + item.name + ' ' + waitTime + ', ... '
             cardText = cardText + '\\n' + item.name + ' ' + waitTime
         speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"'+response+' You can say schedule an appointment if you would like to schedule an appointment at this time."},"card": {"type": "Simple","title": "Lafayette General Urgent Care", "content": "'+cardText+'"},"shouldEndSession":false}}'
         return json.loads(speech)
-        
+    #-----Return closed message-----#    
     if isOpen == False:
         response = "I'm sorry, the facilities are currently closed.  Wait times are not available"
         speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"'+response+'"},"card": {"type": "Simple","title": "Lafayette General Urgent Care", "content": "'+cardText+'"}}}'
@@ -234,23 +234,27 @@ def getDevice(event):
     r = requests.get(URL, headers=HEADER)
     return r
 
+#-----Opening welcome message-----#
 def welcomePrompt():
     print "Welcome Prompt Initiated"
     response = "Welcome to the Lafayette General Urgent Care Skill.  How may I help you today?  You can say Help for more information."
     speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"' + response + '"},"shouldEndSession":false}}'
     return json.loads(speech)        
-    
+
+#-----Help intent definition-----#
 def helpIntent():
     print "Help Intent Initiated"
     response = "The LGH Urgent Care Skill can provide you information about our Urgent Care facilities in Acaydiana.  You can schedule an appointment by saying Alexa, ask Urgent Care to schedule an appointment.  You can also ask Urgent Care for current wait times, to list all Urgent Care facilities, hours of operation, or even to locate the closest clinic.  To use the skill, simply say Alexa, ask Urgent Care"
     speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"' + response + '"},"shouldEndSession":false}}'
     return json.loads(speech)
-    
+
+#-----Get next available appointment for facilities-----#
 def getNextAppt(event):
     print "Getting next avilable appt time"
     print str(event['request']['intent']['slots']['facility'])
     print "Facility confirmed? "
     print str(event['request']['intent']['slots']['facility']['confirmationStatus'])
+    #-----If no facility defined return next available appointment for each facility-----#
     if 'ER_SUCCESS_MATCH' not in str(event['request']['intent']['slots']['facility']):
         sched = []
         i = 0
@@ -266,7 +270,7 @@ def getNextAppt(event):
                 i+=1
             sched.append(item.name)
             sched.append(str(nextSlot))
-    
+        #-----If all three facilities have no appointments, return generic error message-----#
         if i == 3:     
             speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"Sorry, there are no appointments available right now."},"shouldEndSession":true}}'
             print speech
@@ -274,10 +278,12 @@ def getNextAppt(event):
         response = ""
         for item in sched:
             response = response + ' ' + item +', '
+	#-----Return voice data to echo user-----#
         print response
         speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"  The next available appointment times are: ' + response + '.  You can say schedule an appointment in order to get in line"},"shouldEndSession":false}}'
         return json.loads(speech)
     else:
+	#-----Return specific facility next available appointment-----#
         clinID = event['request']['intent']['slots']['facility']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['id']
         URL = "https://www.clockwisemd.com/hospitals/{}/appointments/available_times?page_type=urgent_care_online_time_by_reason&version=v1&reason_description=Walk-In%20Visit".format(clinID)
         r = requests.get(URL)
@@ -288,11 +294,12 @@ def getNextAppt(event):
             speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"The next available appointment time is at: '+nextSlot+'.  You can say schedule an appointment in order to get in line."},"shouldEndSession":false}}'
             return json.loads(speech)
         else:
+	#-----If no appt available, return generic error case-----#
             nextSlot =  "No appointment times are currently available."
             speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"'+nextSlot+'"},"shouldEndSession":true}}'
             return json.loads(speech)
         
-
+#-----Get appointments-----#
 def getApptTime(clinID):
     print "Getting appointment times..."
     URL = "https://www.clockwisemd.com/hospitals/{}/appointments/available_times?page_type=urgent_care_online_time_by_reason&version=v1&reason_description=Walk-In%20Visit".format(clinID)
@@ -309,24 +316,28 @@ def getApptTime(clinID):
         appTime.append("No appointments currently available.")
         return appTime
 
+#-----Speech builder routine-----#
 def build_PlainSpeech(body):
     speech = {}
     speech['type'] = 'PlainText'
     speech['text'] = body
     return speech
 
+#-----Build return response to Echo API-----#
 def build_response(message, session_attributes={}):
         response = {}
         response['version'] = '1.0'
         response['response'] = message
         return response
 
+#-----Routine for handling conversational speech-----#
 def conversation(title, body, session_attributes):
     speechlet = {}
     speechlet['outputSpeech'] = build_PlainSpeech(body)
     speechlet['shouldEndSession'] = False
     return build_response(speechlet, session_attributes=session_attributes)
-    
+
+#-----One shot routing-----#
 def statement(title, body):
     speechlet = {}
     speechlet['outputSpeech'] = build_PlainSpeech(body)
@@ -334,41 +345,46 @@ def statement(title, body):
     speechlet['shouldEndSession'] = True
     return build_response(speechlet)
 
+#-----Routine for handling dialogue variable gathering-----#
 def continue_dialog():
         message = {}
         message['shouldEndSession'] = False
         message['directives'] = [{'type': 'Dialog.Delegate'}]
         return build_response(message)
-    
+
+#-----Gather information from users trying to schedule appointment-----#
 def scheduleAppt(event, isOpen,now):
     print "Starting appointment scheduling"
     if isOpen == False:
         if now <= 6:
             speech = '{"version": "1.0", "response": {"outputSpeech": {"type":"PlainText","text":" Sorry all facilities are currently closed, please try again tomorrow.  Goodbye"}}}'
             return json.loads(speech) 
-        
+    
+    #-----Check for dialogue state if conversation is ongoing or finished-----#
     dialog_state = event['request']['dialogState']
 
+    #-----Continue taking input-----#
     if dialog_state in ("STARTED", "IN_PROGRESS"):
         return continue_dialog()
 
+    #-----Once completed, begin stripping out session attributes-----#
     elif dialog_state == "COMPLETED":
         print "Dialogue check complete, building session attributes"
-        
+        #-----Gather first, last names, phone number, facility ID-----#
         firstName = event['request']['intent']['slots']['firstName']['value']
         lastName = event['request']['intent']['slots']['lastName']['value']
         phoneNumber =  event['request']['intent']['slots']['phoneNumber']['value']
         facilityID = event['request']['intent']['slots']['facility']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['id']
-        
+        #-----Gather Date of birth and format properly-----#
         DOB = event['request']['intent']['slots']['birthday']['value']
         bYear = DOB[:4]
         bMonth = DOB[-2:]
         bDay = DOB[-5:]
         fDOB = bDay+'%2F'+bMonth+'%2F'+bYear
-        
+        #-----Get information for for cigna and bayou-----#
         cigna = event['request']['intent']['slots']['cigna']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['id']
         bayou = event['request']['intent']['slots']['bayou']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['id']
-
+	#-----Parse and format phone-----#
         phone_len = len(phoneNumber)
         if phone_len == 7:
             area_code = "337"
@@ -379,15 +395,18 @@ def scheduleAppt(event, isOpen,now):
         phone1 = phone[:3]
         phone2 = phone[-4:]
         formattedPhone = area_code+'+'+phone1+'+'+phone2
+	
+	#-----Get appointment times-----#
         apptTime = getApptTime(facilityID)
-    
+
+    #-----Error handle-----#
     if apptTime[1] == "No appointments currently available.":
         speech = '{"version": "1.0", "response": {"outputSpeech": {"type":"PlainText","text":" Sorry there are no appointment times available.  If this is an emergency please go to your closest Emergency Facility.  Otherwise, please try again tomorrow.  Goodbye" }, "shouldEndSession":true},"sessionAttributes": {"firstName" : "'+firstName+'", "lastName": "'+lastName+'", "phoneNumber": "'+formattedPhone+'","facilityID": "'+facilityID+'","displayTime":"'+apptTime[1]+'","nextTime":"'+apptTime[0]+'","cigna":"'+cigna+'","bayou":"'+bayou+'","DOB":"'+fDOB+'"}}'
         return json.loads(speech) 
     else:    
       speech = '{"version": "1.0", "response": {"outputSpeech": {"type":"PlainText","text":" The next appointment time is '+apptTime[1]+'. Would you like to get in line?" }, "shouldEndSession":false},"sessionAttributes": {"firstName" : "'+firstName+'", "lastName": "'+lastName+'", "phoneNumber": "'+formattedPhone+'","facilityID": "'+facilityID+'","displayTime":"'+apptTime[1]+'","nextTime":"'+apptTime[0]+'","cigna":"'+cigna+'","bayou":"'+bayou+'","DOB":"'+fDOB+'"}}'
       return json.loads(speech) 
-    
+#-----If appointment is confirmed, post data to clockwise-----#    
 def confirmAppt(event):
     print "Attempting to schedule"
     session_attributes = {}
@@ -416,13 +435,13 @@ def confirmAppt(event):
     print postInfo
     
     req = requests.post(URL, data=postInfo)
-
+    #-----Check return of post, if 200, successful-----#
     print req.status_code
     if req.status_code == 200:
         phoneNumber = phoneNumber.replace('+','')
         speech = '{"response": {"outputSpeech": {"type":"SSML","ssml":"<speak> I have scheduled an appointment at '+displayTime+' for '+firstName+' '+lastName+'.  I have sent a text message to <say-as interpret-as=\'telephone\'>'+phoneNumber+'</say-as>.</speak>"}}}'
         return json.loads(speech) 
-    
+    #-----Handle errors-----#
     if req.status_code == 422:
         response = "I'm sorry, that appointment was just taken.  Please try again."
         speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"' + response + '"},"shouldEndSession":true}}'
@@ -433,13 +452,15 @@ def confirmAppt(event):
         speech = '{"version": "1.0","response": {"outputSpeech": {"type":"PlainText","text":"' + response + '"},"shouldEndSession":true}}'
         return speech
 
+#-----Check time of request-----#
 def getReqTime(event):
     now = event['request']['timestamp']
     now = now[-9:]
     now = now[:2]
     print "Current hour UTC: " + now
     return now
-    
+
+#-----Check for facility being open or closed-----#
 def checkIfOpen(now):
     intNow = int(now)
     isOpen = False
@@ -453,7 +474,8 @@ def checkIfOpen(now):
     else:
         print "Facilities are closed"
     return isOpen
-        
+
+#-----Routine for checking facility hours-----#
 def getHours(isOpen):
     print "Getting hours"
     if isOpen == True:
@@ -464,6 +486,7 @@ def getHours(isOpen):
     speech = '{"response": {"outputSpeech": {"type":"SSML","ssml":"<speak> '+response+'.</speak>"}}}'
     return json.loads(speech)
     
+#-----Returns phone numbers-----#	
 def getPhone(event):
     print "Getting phone numbers"
     dialog_state = event['request']['dialogState']
@@ -487,6 +510,7 @@ def getPhone(event):
         speech = '{"response": {"outputSpeech": {"type":"SSML","ssml":"<speak> '+response+' <say-as interpret-as=\'telephone\'>'+phoneNumber+'</say-as>.  I have sent this phone number to your Alexa App under the Home Screen</speak>"},"card": {"type": "Standard","title": "Phone Number", "text": "'+facilityName+'\\n'+phoneNumber+'"}}}'
         return json.loads(speech)
 
+#-----Default skill exit routine-----#
 def quitSkill():
     print "Quitting skill..."
     speech = '{"response": {"outputSpeech": {"type":"SSML","ssml":"<speak>Thank you for using Lafayette General Urgent Care, goodbye.</speak>"}}}'
